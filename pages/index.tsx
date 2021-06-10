@@ -1,8 +1,9 @@
 import Head from "next/head";
+import { useEffect, useRef } from "react";
+import { Input } from "@chakra-ui/react";
 import styles from "styles/Home.module.css";
 import DynamicText from "components/DynamicText";
-import { useEffect, useRef } from "react";
-import { Input } from "@chakra-ui/react"
+import ProtectedPage from "components/ProtectedPage";
 
 const Home = () => {
   const dynamicTextRef = useRef(null);
@@ -12,22 +13,24 @@ const Home = () => {
     dynamicTextRef.current.changeValue(e.target.value);
   };
 
-  useEffect(() => {
+  const onOK = () => {
     inputRef.current.value = dynamicTextRef.current.getValue();
-  });
+  };
 
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Coding Test</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <ProtectedPage onOK={onOK}>
+      <div className={styles.container}>
+        <Head>
+          <title>Coding Test</title>
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
 
-      <main className={styles.main}>
-        <DynamicText ref={dynamicTextRef} />
-        <Input onChange={onChange} ref={inputRef} />
-      </main>
-    </div>
+        <main className={styles.main}>
+          <DynamicText ref={dynamicTextRef} />
+          <Input onChange={onChange} ref={inputRef} />
+        </main>
+      </div>
+    </ProtectedPage>
   );
 };
 
