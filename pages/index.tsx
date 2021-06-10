@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { Input } from "@chakra-ui/react";
 import styles from "styles/Home.module.css";
 import DynamicText from "components/DynamicText";

@@ -1,5 +1,5 @@
 import "styles/globals.css";
-import { AuthProvider } from "context/auth";
+import { AuthProvider } from "modules/auth";
 import { ChakraProvider } from "@chakra-ui/react";
 
 const MyApp = ({ Component, pageProps }) => {

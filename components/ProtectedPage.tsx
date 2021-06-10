@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { useAuth } from 'context/auth';
+import { useAuth } from 'modules/auth';
+import Loading from 'components/Loading';
 
 export default function ProtectedPage({ onOK, children }) {
   const { user, loading } = useAuth();
@@ -19,7 +20,7 @@ export default function ProtectedPage({ onOK, children }) {
   }, [user, loading]);
 
   if (loading || !user) {
-    return <p>Redirecting...</p>
+    return <Loading />
   }
 
   return <>{children}</>;
