@@ -1,11 +1,20 @@
 import Head from "next/head";
-import styles from "../styles/Home.module.css";
-import DynamicText from "../components/DynamicText";
+import styles from "styles/Home.module.css";
+import DynamicText from "components/DynamicText";
+import { useEffect, useRef } from "react";
+import { Input } from "@chakra-ui/react"
 
 const Home = () => {
+  const dynamicTextRef = useRef(null);
+  const inputRef = useRef(null);
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
+    dynamicTextRef.current.changeValue(e.target.value);
   };
+
+  useEffect(() => {
+    inputRef.current.value = dynamicTextRef.current.getValue();
+  });
 
   return (
     <div className={styles.container}>
@@ -15,8 +24,8 @@ const Home = () => {
       </Head>
 
       <main className={styles.main}>
-        <DynamicText />
-        <input onChange={onChange} />
+        <DynamicText ref={dynamicTextRef} />
+        <Input onChange={onChange} ref={inputRef} />
       </main>
     </div>
   );
