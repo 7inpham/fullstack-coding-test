@@ -28,20 +28,20 @@ const Blog = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const db = firebase.firestore();
-      const response = await db.collection('articles')
-      const data = await response.get();
-      const articles = data.docs.map((doc) => {
-        const fields = doc.data();
+    const firestore = firebase.firestore();
+    const unsubscribe = firestore.collection('articles').onSnapshot((snapshot) => {
+      const articles = snapshot.docs.map((doc) => {
+      const fields = doc.data();
         return {
           id: doc.id,
           ...fields
         }
       });
       setArticles(articles);
+    });
+    return () => {
+      unsubscribe();
     };
-    fetchData();
   }, []);
 
   return (
