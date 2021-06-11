@@ -3,7 +3,7 @@ import firebase from 'modules/firebase';
 
 export const AuthContext = createContext<{
   user: firebase.User | null,
-  loading: Boolean,
+  loading: boolean,
   signin: (email, password) => Promise<void>,
   signup: (email, password) => Promise<void>,
   signout: () => Promise<void>
