@@ -7,7 +7,7 @@ import Loading from "components/Loading";
 
 const Login = () => {
   const router = useRouter();
-  const { user, loading, signin, signup } = useAuth();
+  const { user, loading, signin, signup, signout } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [processing, setProcessing] = useState(false);
@@ -15,7 +15,21 @@ const Login = () => {
   const [inSigninMode, setInSigninMode] = useState(true);
 
   const toggleMode = () => {
+    setMessage('');
     setInSigninMode(!inSigninMode);
+  };
+
+  const onInputChange = (event) => {
+    setMessage('');
+    const name = event.target.name;
+    if (name === 'email') {
+      setEmail(event.target.value);
+      return;
+    }
+    if (name === 'password') {
+      setPassword(event.target.value);
+      return;
+    }
   };
 
   const onSubmit = async (event) => {
@@ -36,6 +50,18 @@ const Login = () => {
     }
   };
 
+  const onSignout = async () => {
+    setProcessing(true);
+    setMessage('');
+    try {
+      await signout();
+    } catch(e) {
+      setMessage(String(e));
+    } finally {
+      setProcessing(false);
+    }
+  };
+
   if (loading) {
     return <Loading />
   }
@@ -47,49 +73,65 @@ const Login = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Container align="center">
-        <Box my={4}>
-          <Alert status="error" borderRadius={4} hidden={!message}>
-            <AlertIcon />
-            <AlertDescription>{message}</AlertDescription>
-          </Alert>
-        </Box>
-        <Box borderWidth={1} borderRadius={8} boxShadow="lg" padding="" maxWidth="500" p="8">
-          <Box textAlign="center">
-            <Heading>
-              { inSigninMode ? 'Sign In' : 'Sign Up' }
-            </Heading>
+      {
+        user
+        ?
+        <Container align="center">
+          <Box mt="6">
+            <Button width="full" disabled={processing} onClick={onSignout}>
+              Sign Out
+            </Button>
           </Box>
-          <Box mt="4">
-            <form onSubmit={onSubmit}>
-              <FormControl isRequired>
-                <FormLabel>Email</FormLabel>
-                <Input type="email" value={email} onChange={(event) => setEmail(event.target.value)} />
-              </FormControl>
-              <FormControl mt="4" isRequired>
-                <FormLabel>Password</FormLabel>
-                <Input type="password" value={password} onChange={(event) => setPassword(event.target.value)} />
-              </FormControl>
-              <Button width="full" mt="6" type="submit" disabled={processing}>
-                {
-                  processing
-                    ? <CircularProgress isIndeterminate size="24px" color="teal"/>
-                    : 'Submit'
-                }
-              </Button>
-              <Link>
-                <Text mt="4" onClick={toggleMode}>
+        </Container>
+        :
+        <Container align="center">
+          <Box my={4}>
+            <Alert status="error" borderRadius={4} hidden={!message}>
+              <AlertIcon />
+              <AlertDescription>{message}</AlertDescription>
+            </Alert>
+          </Box>
+          <Box borderWidth={1} borderRadius={8} boxShadow="lg" padding="" maxWidth="500" p="8">
+            <Box textAlign="center">
+              <Heading>
+                { inSigninMode ? 'Sign In' : 'Sign Up' }
+              </Heading>
+            </Box>
+            <Box mt="4">
+              <form onSubmit={onSubmit}>
+                <FormControl isRequired>
+                  <FormLabel>Email</FormLabel>
+                  <Input type="email" value={email} name="email" onChange={onInputChange} />
+                </FormControl>
+                <FormControl mt="4" isRequired>
+                  <FormLabel>Password</FormLabel>
+                  <Input type="password" value={password} name="password" onChange={onInputChange} />
+                </FormControl>
+                <Button width="full" mt="6" type="submit" disabled={processing}>
                   {
-                    inSigninMode
-                      ? 'Not have an account yet?'
-                      : 'Already registered?'
+                    processing
+                      ? <CircularProgress isIndeterminate size="24px" color="teal"/>
+                      : 'Submit'
                   }
-                </Text>
-              </Link>
-            </form>
+                </Button>
+                {
+                  !processing
+                  &&
+                  <Link>
+                    <Text mt="4" onClick={toggleMode}>
+                      {
+                        inSigninMode
+                          ? 'Not have an account yet?'
+                          : 'Already registered?'
+                      }
+                    </Text>
+                  </Link>
+                }
+              </form>
+            </Box>
           </Box>
-        </Box>
-      </Container>
+        </Container>
+      }
     </>
   );
 };
