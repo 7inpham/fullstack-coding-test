@@ -70,7 +70,7 @@ const Login = () => {
   return (
     <>
       <Head>
-        <title>Login Coding Test</title>
+        <title>Login</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

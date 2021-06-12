@@ -15,8 +15,11 @@ export default function MainHeader() {
         <ListItem mr="4">
           <Link href="/">Home</Link>
         </ListItem>
-        <ListItem>
+        <ListItem mr="4">
           <Link href="/blog">Blog</Link>
+        </ListItem>
+        <ListItem>
+          <Link href="/dashboard">Dashboard</Link>
         </ListItem>
       </List>
       <Flex alignItems="center">
@@ -30,7 +33,7 @@ export default function MainHeader() {
             <Text mr="4">
               Hi {user.email}
             </Text>
-            <Button size="sm" onClick={onSignout}>Logout</Button>
+            <Button size="sm" colorScheme="teal" onClick={onSignout}>Logout</Button>
           </Flex>
         }
       </Flex>

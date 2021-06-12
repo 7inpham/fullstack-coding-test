@@ -8,15 +8,25 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  ModalFooter,
   Text,
-  useDisclosure
+  useDisclosure,
+  ListItem,
+  List,
+  Button,
+  Input,
+  Textarea,
+  FormControl,
+  FormLabel,
+  Flex,
+  Heading
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import firebase from 'modules/firebase';
 import MainHeader from 'components/MainHeader';
 import MainContainer from 'components/MainContainer';
 
-const Blog = () => {
+const Dashboard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [ articles, setArticles ] = useState([]);
   const [ activeArticle, setActiveArticle ] = useState(null);
@@ -58,16 +68,22 @@ const Blog = () => {
       <MainHeader/>
 
       <MainContainer>
-        <Box pt="4" pb="4">
+        <Flex alignItems="center" justifyContent="space-between">
+          <Heading as="h2" size="md" textAlign="left">Manage Blog Articles</Heading>
+          <Button>New</Button>
+        </Flex>
+        <List pt="4" pb="4">
           {
             articles.map((article) =>
-              <Box key={article.id} borderWidth={1} mb="4" onClick={() => showArticle(article)}>
-                <Image src={article.image} />
-                <Box textAlign="left" p="8">{article.title}</Box>
-              </Box>
+              <ListItem key={article.id} borderWidth={1} mb="4" p="4">
+                <Flex alignItems="center" justifyContent="space-between">
+                  <Text textAlign="left">{article.title}</Text>
+                  <Button onClick={() => showArticle(article)}>Edit</Button>
+                </Flex>
+              </ListItem>
             )
           }
-        </Box>
+        </List>
       </MainContainer>
 
       <Modal isOpen={isOpen} onClose={closeArticle}>
@@ -76,12 +92,26 @@ const Blog = () => {
         activeArticle
         &&
         <ModalContent maxWidth="800">
-          <ModalHeader>{activeArticle.title}</ModalHeader>
+          <ModalHeader>Article #{activeArticle.id}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Image src={activeArticle.image} alt={activeArticle.title} />
-            <Text pt="8" pb="8">{activeArticle.content}</Text>
+            <FormControl>
+              <FormLabel>Title</FormLabel>
+              <Input type="text" value={activeArticle.title}/>
+            </FormControl>
+            <FormControl mt="4">
+              <FormLabel>Image URL</FormLabel>
+              <Input type="text" value={activeArticle.image}/>
+            </FormControl>
+            <FormControl mt="4">
+              <FormLabel>Content</FormLabel>
+              <Textarea value={activeArticle.content}/>
+            </FormControl>
           </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="red">Delete</Button>
+            <Button ml="4" colorScheme="teal">Update</Button>
+          </ModalFooter>
         </ModalContent>
         }
       </Modal>
@@ -89,4 +119,4 @@ const Blog = () => {
   );
 };
 
-export default Blog;
+export default Dashboard;
