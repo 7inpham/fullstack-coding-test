@@ -1,4 +1,4 @@
-import { Container } from "@chakra-ui/layout";
+import { Container } from "@chakra-ui/react";
 import { CircularProgress } from "@chakra-ui/progress";
 
 export default function Loading() {

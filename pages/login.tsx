@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useAuth } from "modules/auth";
 import { Alert, AlertDescription, AlertIcon, Box, Button, Container, FormControl, FormLabel, Heading, Input, CircularProgress, Link, Text } from "@chakra-ui/react";
 import Loading from "components/Loading";
+import MainContainer from "components/MainContainer";
 
 const Login = () => {
   const router = useRouter();
@@ -74,63 +75,63 @@ const Login = () => {
       </Head>
 
       {
-        user
-        ?
-        <Container align="center">
-          <Box mt="6">
-            <Button width="full" disabled={processing} onClick={onSignout}>
-              Sign Out
-            </Button>
+      user
+      ?
+      <MainContainer>
+        <Box mt="6">
+          <Button width="full" disabled={processing} onClick={onSignout}>
+            Sign Out
+          </Button>
+        </Box>
+      </MainContainer>
+      :
+      <MainContainer>
+        <Box my={4}>
+          <Alert status="error" borderRadius={4} hidden={!message}>
+            <AlertIcon />
+            <AlertDescription>{message}</AlertDescription>
+          </Alert>
+        </Box>
+        <Box borderWidth={1} borderRadius={8} boxShadow="lg" padding="" maxWidth="500" p="8">
+          <Box textAlign="center">
+            <Heading>
+              { inSigninMode ? 'Sign In' : 'Sign Up' }
+            </Heading>
           </Box>
-        </Container>
-        :
-        <Container align="center">
-          <Box my={4}>
-            <Alert status="error" borderRadius={4} hidden={!message}>
-              <AlertIcon />
-              <AlertDescription>{message}</AlertDescription>
-            </Alert>
-          </Box>
-          <Box borderWidth={1} borderRadius={8} boxShadow="lg" padding="" maxWidth="500" p="8">
-            <Box textAlign="center">
-              <Heading>
-                { inSigninMode ? 'Sign In' : 'Sign Up' }
-              </Heading>
-            </Box>
-            <Box mt="4">
-              <form onSubmit={onSubmit}>
-                <FormControl isRequired>
-                  <FormLabel>Email</FormLabel>
-                  <Input type="email" value={email} name="email" onChange={onInputChange} />
-                </FormControl>
-                <FormControl mt="4" isRequired>
-                  <FormLabel>Password</FormLabel>
-                  <Input type="password" value={password} name="password" onChange={onInputChange} />
-                </FormControl>
-                <Button width="full" mt="6" type="submit" disabled={processing}>
-                  {
-                    processing
-                      ? <CircularProgress isIndeterminate size="24px" color="teal"/>
-                      : 'Submit'
-                  }
-                </Button>
+          <Box mt="4">
+            <form onSubmit={onSubmit}>
+              <FormControl isRequired>
+                <FormLabel>Email</FormLabel>
+                <Input type="email" value={email} name="email" onChange={onInputChange} />
+              </FormControl>
+              <FormControl mt="4" isRequired>
+                <FormLabel>Password</FormLabel>
+                <Input type="password" value={password} name="password" onChange={onInputChange} />
+              </FormControl>
+              <Button width="full" mt="6" type="submit" disabled={processing}>
                 {
-                  !processing
-                  &&
-                  <Link>
-                    <Text mt="4" onClick={toggleMode}>
-                      {
-                        inSigninMode
-                          ? 'Not have an account yet?'
-                          : 'Already registered?'
-                      }
-                    </Text>
-                  </Link>
+                  processing
+                    ? <CircularProgress isIndeterminate size="24px" color="teal"/>
+                    : 'Submit'
                 }
-              </form>
-            </Box>
+              </Button>
+              {
+                !processing
+                &&
+                <Link>
+                  <Text mt="4" onClick={toggleMode}>
+                    {
+                      inSigninMode
+                        ? 'Not have an account yet?'
+                        : 'Already registered?'
+                    }
+                  </Text>
+                </Link>
+              }
+            </form>
           </Box>
-        </Container>
+        </Box>
+      </MainContainer>
       }
     </>
   );

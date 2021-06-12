@@ -1,9 +1,10 @@
 import Head from "next/head";
 import { useRef } from "react";
-import { Input } from "@chakra-ui/react";
-import styles from "styles/Home.module.css";
+import { Input, Box, Container } from "@chakra-ui/react";
 import DynamicText from "components/DynamicText";
-import ProtectedPage from "components/ProtectedPage";
+import ProtectedContent from "components/ProtectedContent";
+import MainHeader from "components/MainHeader";
+import MainContainer from "components/MainContainer";
 
 const Home = () => {
   const dynamicTextRef = useRef(null);
@@ -18,19 +19,23 @@ const Home = () => {
   };
 
   return (
-    <ProtectedPage onOK={onOK}>
-      <div className={styles.container}>
-        <Head>
-          <title>Coding Test</title>
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+    <>
+      <Head>
+        <title>Coding Test</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-        <main className={styles.main}>
-          <DynamicText ref={dynamicTextRef} />
-          <Input onChange={onChange} ref={inputRef} />
-        </main>
-      </div>
-    </ProtectedPage>
+      <MainHeader/>
+
+      <MainContainer>
+        <ProtectedContent onOK={onOK}>
+          <Box pt="4" pb="4" maxWidth="500">
+            <DynamicText ref={dynamicTextRef} />
+            <Input onChange={onChange} ref={inputRef} />
+          </Box>
+        </ProtectedContent>
+      </MainContainer>
+    </>
   );
 };
 

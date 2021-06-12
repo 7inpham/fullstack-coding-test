@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useAuth } from 'modules/auth';
 import Loading from 'components/Loading';
 
-export default function ProtectedPage({ onOK, children }) {
+export default function ProtectedContent({ onOK, children }) {
   const { user, loading } = useAuth();
   const router = useRouter()
 

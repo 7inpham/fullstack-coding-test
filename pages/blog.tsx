@@ -1,16 +1,20 @@
 import Head from "next/head";
 import {
-  Container,
   Box,
   Image,
   Modal,
+  ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalBody,
+  ModalCloseButton,
+  Text,
   useDisclosure
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import firebase from 'modules/firebase';
+import MainHeader from 'components/MainHeader';
+import MainContainer from 'components/MainContainer';
 
 const Blog = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -51,29 +55,34 @@ const Blog = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Container align="center">
-        <Box p="8" maxWidth="500">
+      <MainHeader/>
+
+      <MainContainer>
+        <Box pt="4" pb="4">
           {
             articles.map((article) =>
               <Box key={article.id} borderWidth={1} boxShadow="lg" mb="4" p="8" onClick={() => showArticle(article)}>
                 <Image src={article.image} alt={article.title} />
-                <Box>{article.title}</Box>
+                <Box textAlign="left" mt="4">{article.title}</Box>
               </Box>
             )
           }
         </Box>
-      </Container>
+      </MainContainer>
 
       <Modal isOpen={isOpen} onClose={closeArticle}>
+        <ModalOverlay />
         {
-          activeArticle
-          &&
-          <ModalContent>
-            <ModalHeader>{activeArticle.title}</ModalHeader>
-            <ModalBody>
-              {activeArticle.content}
-            </ModalBody>
-          </ModalContent>
+        activeArticle
+        &&
+        <ModalContent maxWidth="800">
+          <ModalHeader>{activeArticle.title}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Image src={activeArticle.image} alt={activeArticle.title} />
+            <Text mt="4">{activeArticle.content}</Text>
+          </ModalBody>
+        </ModalContent>
         }
       </Modal>
     </>
