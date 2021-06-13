@@ -1,7 +1,5 @@
 import Head from "next/head";
 import {
-  Box,
-  Image,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -25,6 +23,7 @@ import { useEffect, useState } from "react";
 import firebase from 'modules/firebase';
 import MainHeader from 'components/MainHeader';
 import MainContainer from 'components/MainContainer';
+import axios from "axios";
 
 const Dashboard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,9 +35,33 @@ const Dashboard = () => {
     onOpen();
   };
 
+  const newArticle = () => {
+    setActiveArticle({});
+    onOpen()
+  };
+
   const closeArticle = () => {
     setActiveArticle(null);
     onClose();
+  };
+
+  const onSave = async () => {
+    if (activeArticle.id) {
+      await axios.put('https://nitba6jdc4.execute-api.us-east-1.amazonaws.com/dev/articles/'  + activeArticle.id, activeArticle);
+    } else {
+      await axios.post('https://nitba6jdc4.execute-api.us-east-1.amazonaws.com/dev/articles', activeArticle);
+    }
+  };
+
+  const onDelete = async () => {
+    await axios.delete('https://nitba6jdc4.execute-api.us-east-1.amazonaws.com/dev/articles/' + activeArticle.id);
+  };
+
+  const onChangeActiveArticle = (name, event) => {
+    setActiveArticle({
+      ...activeArticle,
+      [name]: event.target.value,
+    });
   };
 
   useEffect(() => {
@@ -70,7 +93,7 @@ const Dashboard = () => {
       <MainContainer>
         <Flex alignItems="center" justifyContent="space-between">
           <Heading as="h2" size="md" textAlign="left">Manage Blog Articles</Heading>
-          <Button>New</Button>
+          <Button onClick={newArticle}>New</Button>
         </Flex>
         <List pt="4" pb="4">
           {
@@ -97,20 +120,20 @@ const Dashboard = () => {
           <ModalBody>
             <FormControl>
               <FormLabel>Title</FormLabel>
-              <Input type="text" value={activeArticle.title}/>
+              <Input type="text" value={activeArticle.title} onChange={(e) => onChangeActiveArticle('title', e)}/>
             </FormControl>
             <FormControl mt="4">
               <FormLabel>Image URL</FormLabel>
-              <Input type="text" value={activeArticle.image}/>
+              <Input type="text" value={activeArticle.image} onChange={(e) => onChangeActiveArticle('image', e)}/>
             </FormControl>
             <FormControl mt="4">
               <FormLabel>Content</FormLabel>
-              <Textarea value={activeArticle.content}/>
+              <Textarea value={activeArticle.content} onChange={(e) => onChangeActiveArticle('content', e)}/>
             </FormControl>
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="red">Delete</Button>
-            <Button ml="4" colorScheme="teal">Update</Button>
+            {activeArticle.id && <Button colorScheme="red" onClick={onDelete}>Delete</Button>}
+            <Button ml="4" colorScheme="teal" onClick={onSave}>Save</Button>
           </ModalFooter>
         </ModalContent>
         }
